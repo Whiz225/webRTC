@@ -254,6 +254,9 @@ export const updateUIAfterHandUp = (callType) => {
   showElement(placeholder);
 
   removeAllDialogs();
+
+  // Handle mobile layout
+  handleMobileLayout();
 };
 
 export const updateStrangerCheckbox = (allowConnections) => {
@@ -289,5 +292,15 @@ const hideElement = (element) => {
 const showElement = (element) => {
   if (element.classList.contains("display_none")) {
     element.classList.remove("display_none");
+  }
+};
+
+export const handleMobileLayout = () => {
+  if (window.innerWidth <= 768) {
+    // Mobile-specific UI adjustments
+    const dashboard = document.querySelector(".dashboard_container");
+    if (!dashboard.classList.contains("mobile_open")) {
+      removeAllDialogs();
+    }
   }
 };

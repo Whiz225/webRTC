@@ -12,13 +12,41 @@ wss.registerSocketEvents(socket);
 
 webRTCHandler.getLocalPreview();
 
+// Mobile menu functionality
+const mobileMenuButton = document.getElementById("mobile_menu_button");
+const dashboardContainer = document.querySelector(".dashboard_container");
+
+mobileMenuButton.addEventListener("click", () => {
+  dashboardContainer.classList.toggle("mobile_open");
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener("click", (event) => {
+  if (window.innerWidth <= 768) {
+    const isClickInsideDashboard = dashboardContainer.contains(event.target);
+    const isClickOnMenuButton = mobileMenuButton.contains(event.target);
+
+    if (
+      !isClickInsideDashboard &&
+      !isClickOnMenuButton &&
+      dashboardContainer.classList.contains("mobile_open")
+    ) {
+      dashboardContainer.classList.remove("mobile_open");
+    }
+  }
+});
+
 // register event listeners for personal code copy button
 const personalCodeCopyButton = document.getElementById(
   "personal_code_copy_button"
 );
 personalCodeCopyButton.addEventListener("click", () => {
   const personalCode = store.getState().socketId;
-  navigator.clipboard && navigator.clipboard.writeText(personalCode);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(personalCode);
+    // Optional: Show a toast notification
+    console.log("Personal code copied to clipboard");
+  }
 });
 
 // register event listeners for connection button
@@ -35,6 +63,7 @@ personalCodeChatButton.addEventListener("click", () => {
   ).value;
   const callType = constants.callType.CHAT_PERSONAL_CODE;
   webRTCHandler.sendPreOffer(callType, calleePersonalCode);
+  closeMobileMenu();
 });
 
 personalCodeVideoButton.addEventListener("click", () => {
@@ -44,11 +73,13 @@ personalCodeVideoButton.addEventListener("click", () => {
   const callType = constants.callType.VIDEO_PERSONAL_CODE;
 
   webRTCHandler.sendPreOffer(callType, calleePersonalCode);
+  closeMobileMenu();
 });
 
 const strangerChatButton = document.getElementById("stranger_chat_button");
 strangerChatButton.addEventListener("click", () => {
   strangerUtils.getStrangerSocketIdAndConnect(constants.callType.CHAT_STRANGER);
+  closeMobileMenu();
 });
 
 const strangerVideoButton = document.getElementById("stranger_video_button");
@@ -56,12 +87,13 @@ strangerVideoButton.addEventListener("click", () => {
   strangerUtils.getStrangerSocketIdAndConnect(
     constants.callType.VIDEO_STRANGER
   );
+  closeMobileMenu();
 });
 
 const checkbox = document.getElementById("allow_stranger_checkbox");
 checkbox.addEventListener("click", () => {
   const checkboxState = store.getState().alowConnectionsFromStrangers;
-  console.log("checkbosState", checkboxState);
+  console.log("checkboxState", checkboxState);
   ui.updateStrangerCheckbox(!checkboxState);
   store.setAllowConnectionsFromStrangers(!checkboxState);
   strangerUtils.changeStrangerConnectionStatus(!checkboxState);
@@ -139,10 +171,26 @@ const hangUpButton = document.getElementById("hang_up_button");
 hangUpButton.addEventListener("click", () => {
   console.log("hangUp clicked");
   webRTCHandler.handleHangUp();
+  closeMobileMenu();
 });
 
 const hangUpChatButton = document.getElementById("finish_chat_call_button");
 hangUpChatButton.addEventListener("click", () => {
   console.log("hangUp clicked 2......");
   webRTCHandler.handleHangUp();
+  closeMobileMenu();
+});
+
+// Function to close mobile menu
+function closeMobileMenu() {
+  if (window.innerWidth <= 768) {
+    dashboardContainer.classList.remove("mobile_open");
+  }
+}
+
+// Handle window resize
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 768) {
+    dashboardContainer.classList.remove("mobile_open");
+  }
 });
