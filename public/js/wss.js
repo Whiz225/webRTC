@@ -15,6 +15,10 @@ export const registerSocketEvents = (socket) => {
     ui.updatePersonalCode(socket.id);
   });
 
+  socket.on("user-count", (data) => {
+    ui.updateOnlineUsersCount(data.count);
+  });
+
   socket.on("pre-offer", (data) => {
     webRTCHandler.handlePreOffer(data);
   });

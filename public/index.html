@@ -12,6 +12,10 @@
         <div class="logo_container">
           <img src="./utils/images/logo.png" />
         </div>
+        <!-- Add this inside your dashboard_container div -->
+<div class="online_users_container">
+    <span id="online_users_count">Online: 1</span>
+</div>
         <div class="dashboard_content">
           <div class="description_container">
             <p class="description_container_paragraph">
@@ -179,6 +183,7 @@
         <img src="./utils/images/menu.png" />
       </button>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/recordingUtils.js" type="module"></script>
     <script src="/js/strangerUtils.js" type="module"></script>

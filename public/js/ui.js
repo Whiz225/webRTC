@@ -304,3 +304,35 @@ export const handleMobileLayout = () => {
     }
   }
 };
+
+// Add this new function to update online users count
+export const updateOnlineUsersCount = (count) => {
+  let onlineUsersElement = document.getElementById("online_users_count");
+
+  if (!onlineUsersElement) {
+    // Create the element if it doesn't exist
+    onlineUsersElement = document.createElement("div");
+    onlineUsersElement.id = "online_users_count";
+    onlineUsersElement.className = "online_users_count";
+    onlineUsersElement.style.cssText = `
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            z-index: 1000;
+        `;
+
+    const dashboard = document.querySelector(".dashboard_container");
+    if (dashboard) {
+      dashboard.appendChild(onlineUsersElement);
+    } else {
+      document.body.appendChild(onlineUsersElement);
+    }
+  }
+
+  onlineUsersElement.textContent = `Online: ${count}`;
+};

@@ -839,3 +839,20 @@ body {
 .messages_container::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+.online_users_container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .online_users_container {
+      top: 60px;
+      right: 10px;
+  }
+}

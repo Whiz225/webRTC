@@ -6,11 +6,18 @@ import * as webRTCHandler from "./webRTCHandler.js";
 import * as recordingUtils from "./recordingUtils.js";
 import * as strangerUtils from "./strangerUtils.js";
 
+const getTurnServerCredentials = async () => {
+  const responseData = await axios.get("/api/get-turn-credentials");
+  webRTCHandler.setTURNServers(responseData.data.token.iceServers);
+};
+
 // initialization of socketIO connection
 const socket = io("/");
 wss.registerSocketEvents(socket);
 
-webRTCHandler.getLocalPreview();
+getTurnServerCredentials().then(() => {
+  webRTCHandler.getLocalPreview();
+});
 
 // Mobile menu functionality
 const mobileMenuButton = document.getElementById("mobile_menu_button");
@@ -44,8 +51,6 @@ personalCodeCopyButton.addEventListener("click", () => {
   const personalCode = store.getState().socketId;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(personalCode);
-    // Optional: Show a toast notification
-    console.log("Personal code copied to clipboard");
   }
 });
 
