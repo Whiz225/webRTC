@@ -4,12 +4,6 @@ const dotenv = require("dotenv");
 // Load environment variables first
 const envResult = dotenv.config({ path: "./config.env" });
 
-// if (envResult.error) {
-//   console.error("Error loading .env file:", envResult.error);
-// } else {
-//   console.log("Environment variables loaded successfully");
-// }
-
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -26,37 +20,6 @@ const io = new Server(server, {
 
 // Serve static files from public directory
 app.use(express.static("public"));
-
-// API route for TURN credentials
-app.get("/api/get-turn-credentials", async (req, res) => {
-  try {
-    const accountSid = process.env.ACCOUNTSID;
-    const authToken = process.env.AUTHTOKEN;
-
-    if (!accountSid || !authToken) {
-      return res.status(500).json({
-        message: "Twilio credentials not configured",
-        error: "Missing ACCOUNTSID or AUTHTOKEN environment variables",
-      });
-    }
-
-    const twilio = require("twilio");
-    const client = twilio(accountSid, authToken);
-
-    const token = await client.tokens.create();
-
-    res.json({
-      token,
-      message: "TURN credentials fetched successfully",
-    });
-  } catch (err) {
-    console.error("Error fetching TURN credentials:", err);
-    res.status(500).json({
-      message: "Failed to fetch TURN credentials",
-      error: err.message,
-    });
-  }
-});
 
 // Health check endpoint
 app.get("/health", (req, res) => {

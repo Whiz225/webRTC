@@ -6,18 +6,12 @@ import * as webRTCHandler from "./webRTCHandler.js";
 import * as recordingUtils from "./recordingUtils.js";
 import * as strangerUtils from "./strangerUtils.js";
 
-const getTurnServerCredentials = async () => {
-  const responseData = await axios.get("/api/get-turn-credentials");
-  webRTCHandler.setTURNServers(responseData.data.token.iceServers);
-};
 
 // initialization of socketIO connection
 const socket = io("/");
 wss.registerSocketEvents(socket);
 
-getTurnServerCredentials().then(() => {
   webRTCHandler.getLocalPreview();
-});
 
 // Mobile menu functionality
 const mobileMenuButton = document.getElementById("mobile_menu_button");
